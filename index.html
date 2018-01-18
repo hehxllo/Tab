@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #divs1 div ,#divs2 div{
+            width: 200px;
+            height: 200px;
+            border: 1px solid #000;
+            font: 50px/200px Arial, sans-serif;
+            text-align: center;
+            display: none;
+            background: #666;
+        }
+        .active{
+            background: #f00;
+            transform: scale(1.2);
+        }
+        input{
+            width: 50px;
+            height: 50px;
+            outline: none;
+            border: none;
+            background: #000;
+            color: #fff;
+            transition: 2s;
+        }
+    </style>
+    <script>
+        /*var aInput=null;
+        var oBtns=null;
+        var aDiv=null;
+        window.onload=function () {
+            aInput=document.getElementsByTagName('input');
+            oBtns=document.getElementById('box');
+            aDiv=oBtns.getElementsByTagName('div');
+
+            init();
+        };
+        function init() {
+            for (var i=0;i<aInput.length;i++){
+                aInput[i].index=i;
+                aInput[i].onclick=change;
+            }
+        }
+        function change() {
+            for(i=0;i<aInput.length;i++){
+                aInput[i].className='';
+                aDiv[i].style.display='none';
+            }
+            this.className='active';
+            aDiv[this.index].style.display='block';
+        }*/
+        window.onload=function () {
+            var t1=new Tab('btns1','divs1');
+            t1.init();
+            var t2=new Tab('btns2','divs2');
+            t2.init();
+            t2.autoplay();
+        };
+        function Tab(btns,divs) {
+            this.oBtns=document.getElementById(btns);
+            this.aInput=this.oBtns.getElementsByTagName('input');
+            this.oDivs=document.getElementById(divs);
+            this.aDiv=this.oDivs.getElementsByTagName('div');
+            this.iNow=0;
+        }
+        Tab.prototype.init=function () {
+            var This=this;
+            for (var i=0;i<this.aInput.length-1;i++){
+                this.aInput[i].index=i;
+                this.aInput[i].onclick=function () {
+                    This.change(this);
+                };
+            }
+            this.aInput[this.aInput.length-1].onclick=function () {
+                This.add(this);
+                for (var i=0;i<This.aInput.length-1;i++){
+                    This.aInput[i].index=i;
+                    This.aInput[i].onclick=function () {
+                        This.change(this);
+                    };
+                }
+            }
+        };
+        Tab.prototype.change=function (btn) {
+            for(i=0;i<this.aInput.length-1;i++){
+                this.aInput[i].className='';
+                this.aDiv[i].style.display='none';
+            }
+            btn.className='active';
+            this.aDiv[btn.index].style.display='block';
+        };
+        Tab.prototype.autoplay=function () {
+            var This=this;
+            setInterval(function () {
+                for(i=0;i<This.aInput.length-1;i++){
+                    This.aInput[i].className='';
+                    This.aDiv[i].style.display='none';
+                }
+                This.aInput[This.iNow].className='active';
+                This.aDiv[This.iNow].style.display='block';
+
+                This.iNow===This.aInput.length-2?This.iNow=0:This.iNow++;
+            },2000);
+        };
+        Tab.prototype.add=function (plus) {
+            var input=document.createElement('input');
+            input.type='button';
+            input.value=this.aInput.length;
+            this.oBtns.removeChild(plus);
+            this.oBtns.appendChild(input);
+            this.oBtns.appendChild(plus);
+            var div=document.createElement('div');
+            div.innerHTML=this.aInput.length-1;
+            this.oDivs.appendChild(div);
+        };
+    </script>
+</head>
+<body>
+    <div id="btns1"><input type="button" value="1" class="active"><input type="button" value="2"><input type="button" value="3"><input type="button" value="+"></div>
+    <div id="divs1">
+        <div style="display: block;">1</div>
+        <div>2</div>
+        <div>3</div>
+    </div>
+
+
+    <div id="btns2"><input type="button" value="1" class="active"><input type="button" value="2"><input type="button" value="3"><input type="button" value="+"></div>
+    <div id="divs2">
+        <div style="display: block;">1</div>
+        <div>2</div>
+        <div>3</div>
+    </div>
+
+
+</body>
+</html>
